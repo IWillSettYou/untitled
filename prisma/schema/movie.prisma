@@ -1,0 +1,34 @@
+model Movie {
+  id        Int      @id @default(autoincrement())
+  nev       String   @db.VarChar(255)
+  kiadas_ev DateTime @db.Date()
+
+  rendezo_id Int
+  rendezo    Rendezo @relation("rendezo", fields: [rendezo_id], references: [id])
+
+  szineszOnMovie SzineszOnMovie[] @relation()
+}
+
+model Rendezo {
+  id  Int    @id @default(autoincrement())
+  nev String @db.VarChar(255)
+
+  movies Movie[] @relation("rendezo")
+}
+
+model Szinesz {
+  id  Int    @id @default(autoincrement())
+  nev String @db.VarChar(255)
+
+  szineszOnMovie SzineszOnMovie[] @relation()
+}
+
+model SzineszOnMovie {
+  movie_id Int
+  movie    Movie @relation(fields: [movie_id], references: [id])
+
+  szinesz_id Int
+  szinesz    Szinesz @relation(fields: [szinesz_id], references: [id])
+
+  @@id([movie_id, szinesz_id])
+}
